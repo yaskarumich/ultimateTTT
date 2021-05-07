@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React from 'react';
+import './css/Board.css';
 
 function Square(props) {
     let classes = "square"

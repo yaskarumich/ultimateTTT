@@ -1,0 +1,5 @@
+.game-row:after {
+    clear: both;
+    content: "";
+    display: table;
+}

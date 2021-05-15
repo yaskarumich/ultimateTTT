@@ -1,10 +1,10 @@
 body {
     font: 14px "Century Gothic", Futura, sans-serif;
-    margin: 20px;
+    margin-left: 450px;
   }
   
   ol, ul {
-    padding-left: 30px;
+    padding-left: 36px;
   }
   
   .board-row:after {
@@ -51,6 +51,9 @@ body {
     background: lightgreen;
   }
   .O-winner {
-    background: lightsalmon;
+    background: lightgoldenrodyellow;
+  }
+  .desire {
+    background: lightcyan;
   }
   

@@ -3,17 +3,16 @@ import './css/Board.css';
 
 function Square(props) {
     let classes = "square"
-    if (props.winners) {
-      for (let j = 0; j < 3; ++j) {
-        if (props.ident === props.winners[j]) {
-          if (props.value === "X") {
-            classes += " X-winner";
-          }
-          else {
-            classes += " O-winner";
-          }
-        }
+    if (props.champion) {
+      if (props.type === "X") {
+        classes += " X-winner";
       }
+      else {
+        classes += " O-winner";
+      }
+    }
+    else if (!props.type && props.desire) {
+      classes += " desire"
     }
     return (
       <button className={classes} onClick={props.onClick}>

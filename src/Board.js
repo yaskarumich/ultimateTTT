@@ -14,10 +14,23 @@ class Board extends React.Component {
   createBoard = () => {
     let table = []
     let count = 0
+    let champion = false
+    let desire = false
+    if (this.props.winner) {
+      for (let i = 0; i < 3; ++i) {
+        if (this.props.winner[i] === this.props.listId) {
+          champion = true
+        }
+      }
+    }
+    
+    if (this.props.focus === this.props.listId) {
+      desire = true
+    }
     for (let i = 0; i < 3; ++i) {
       let children = []
       for (let j = 0; j < 3; ++j) {
-        children.push(<td>{this.renderSquare(count)}</td>);
+        children.push(<td>{this.renderSquare(count, champion, desire)}</td>);
         count++;
       }
       table.push(<tr>{children}</tr>);
@@ -37,11 +50,14 @@ class Board extends React.Component {
   //   });
   // }
 
-  renderSquare(i) {
+  renderSquare(i, champion, desire) {
     return (
       <Square
         value={this.props.squares[i]}
         onClick={() => this.props.onClick(i,0)}
+        champion = {champion}
+        type = {this.props.type}
+        desire = {desire}
       />
     );
   }

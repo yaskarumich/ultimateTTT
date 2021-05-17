@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Square from './Square.js';
 import './css/Board.css';
 
-class Board extends React.Component {
+class Board extends Component {
   // constructor(props) {
   //   super(props);
   //   this.state = {

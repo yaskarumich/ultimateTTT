@@ -35,7 +35,9 @@ body {
   .square:focus {
     outline: none;
   }
-  
+  .square:hover {
+    cursor: pointer;
+  }
   .kbd-navigation .square:focus {
     background: #ddd;
   }

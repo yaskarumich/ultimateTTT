@@ -11,13 +11,18 @@ class Ultimate extends Component {
             // squares: Array(9).fill(Array(9).fill(null)),
             board: Array(9).fill(null),
             xIsNext: true,
-            won: false,
-            focus: null,
             history: [{
                 squares: Array(9).fill(Array(9).fill(null)),
+                won: false,
+                focus: null,
             }],
             stepNumber: 0,
+            player1: "", 
+            player2: "",
         };
+        // WHY?
+        this.handleChange = this.handleChange.bind(this);
+        this.handleChange2 = this.handleChange2.bind(this);
         
     }
     // createUltimate = (winner, type) => {
@@ -45,33 +50,32 @@ class Ultimate extends Component {
 
     handleClick(i,j) {
         // handling history 
-        if (this.state.won) {
-            return;
-        }
         const history = this.state.history.slice(0, this.state.stepNumber + 1);
         let newArray = history[history.length - 1];
+        if (newArray.won) {
+            return;
+        }
         let squares = newArray.squares.slice();
         let current = squares[j].slice();
         if (current[i] || this.state.board[j] || 
-            (this.state.focus !== null && j !== this.state.focus)) {
+            (newArray.focus !== null && j !== newArray.focus)) {
             return;
         }
         let newFocus = i;
         current[i] = this.state.xIsNext ? 'X' : 'O';
         squares[j] = current;
         const new_board = this.state.board.slice();
+        let win = false
         if (calculateWinner(current)) {
             new_board[j] = current[i];
             if (calculateWinner(new_board)) {
-                this.setState({
-                    won: !this.state.won,
-                });
+                win = true
             }
             this.setState({
                 board: new_board,
             });
         }
-        if (this.state.focus === i) {
+        if (newArray.focus === i) {
             if (new_board[this.state.focus]) {
                 newFocus = null;
             }
@@ -87,9 +91,10 @@ class Ultimate extends Component {
         this.setState({
             // squares: newArray,
             xIsNext: !this.state.xIsNext,
-            focus: newFocus,
             history: history.concat([{
                 squares: squares,
+                focus: newFocus,
+                won: win
             }]),
             stepNumber: history.length,
         })
@@ -101,6 +106,16 @@ class Ultimate extends Component {
           xIsNext: (step % 2) === 0,
         });
       }
+    handleChange(event) {
+        this.setState({
+            player1: event.target.value,
+        })
+    }
+    handleChange2(event) {
+        this.setState({
+            player2: event.target.value,
+        })
+    }
 
     render() {
         const history = this.state.history;
@@ -118,7 +133,8 @@ class Ultimate extends Component {
                 status = "Game is a tie!";
             }
             else {
-                status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+                let turn = (this.state.xIsNext ? this.state.player1 : this.state.player2)
+                status = turn + ' plays: ' + (this.state.xIsNext ? 'X' : 'O');
             }
         }
         const moves = history.map((step, move) => {
@@ -133,8 +149,16 @@ class Ultimate extends Component {
           });
         return(
             <div>
-            <table>
-                <h1>{status}</h1>
+                <label>
+                Player 1:
+                <input type="text" value = {this.state.player1} onChange={this.handleChange} />
+                </label>
+                <label>
+                Player 2:
+                <input type="text" value = {this.state.player2} onChange={this.handleChange2} />
+                </label>
+            <h1>{status}</h1>
+            <table>   
                 <tr>
                     <td>
                         <Board 
@@ -143,7 +167,7 @@ class Ultimate extends Component {
                             winner = {winner}
                             listId = {0}
                             type = {type}
-                            focus = {this.state.focus}
+                            focus = {recent.focus}
                             />
                     </td>
                     <td>
@@ -153,7 +177,7 @@ class Ultimate extends Component {
                             winner = {winner}
                             listId = {1}
                             type = {type}
-                            focus = {this.state.focus}
+                            focus = {recent.focus}
                             />
                     </td>
                     <td>
@@ -163,7 +187,7 @@ class Ultimate extends Component {
                             winner = {winner}
                             listId = {2}
                             type = {type}
-                            focus = {this.state.focus}
+                            focus = {recent.focus}
                             />
                     </td>
                 </tr>
@@ -175,7 +199,7 @@ class Ultimate extends Component {
                             winner = {winner}
                             listId = {3}
                             type = {type}
-                            focus = {this.state.focus}
+                            focus = {recent.focus}
                             />
                     </td>
                     <td>
@@ -185,7 +209,7 @@ class Ultimate extends Component {
                             winner = {winner}
                             listId = {4}
                             type = {type}
-                            focus = {this.state.focus}
+                            focus = {recent.focus}
                             />
                     </td>
                     <td>
@@ -195,7 +219,7 @@ class Ultimate extends Component {
                             winner = {winner}
                             listId = {5}
                             type = {type}
-                            focus = {this.state.focus}
+                            focus = {recent.focus}
                             />
                     </td>
                 </tr>
@@ -207,7 +231,7 @@ class Ultimate extends Component {
                             winner = {winner}
                             listId = {6}
                             type = {type}
-                            focus = {this.state.focus}
+                            focus = {recent.focus}
                             />
                     </td>
                     <td>
@@ -217,7 +241,7 @@ class Ultimate extends Component {
                             winner = {winner}
                             listId = {7}
                             type = {type}
-                            focus = {this.state.focus}
+                            focus = {recent.focus}
                             />
                     </td>
                     <td>
@@ -227,7 +251,7 @@ class Ultimate extends Component {
                             winner = {winner}
                             listId = {8}
                             type = {type}
-                            focus = {this.state.focus}
+                            focus = {recent.focus}
                             />
                     </td>
                 </tr>

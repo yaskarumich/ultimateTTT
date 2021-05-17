@@ -49,24 +49,16 @@ class Ultimate extends Component {
             return;
         }
         const history = this.state.history.slice(0, this.state.stepNumber + 1);
-        let newArray = history[history.length - 1].squares;
-        let squares = newArray.slice();
+        let newArray = history[history.length - 1];
+        let squares = newArray.squares.slice();
         let current = squares[j].slice();
         if (current[i] || this.state.board[j] || 
             (this.state.focus !== null && j !== this.state.focus)) {
             return;
         }
         let newFocus = i;
-        // if (this.state.focus === i) {
-        //     if (this.state.board[this.state.focus]) {
-        //         newFocus = null;
-        //     }
-        // }
-        // if (this.state.board[this.state.focus]) {
-        //     newFocus = null;
-        // }
         current[i] = this.state.xIsNext ? 'X' : 'O';
-        newArray[j] = current;
+        squares[j] = current;
         const new_board = this.state.board.slice();
         if (calculateWinner(current)) {
             new_board[j] = current[i];
@@ -87,12 +79,17 @@ class Ultimate extends Component {
         if (new_board[i]) {
             newFocus = null;
         }
+        // const pizza = [...history, ...new_history];
+        // console.log(pizza);
+        // console.log(new_history);
+        // console.log(history);
+        // console.log(newArray);
         this.setState({
             // squares: newArray,
             xIsNext: !this.state.xIsNext,
             focus: newFocus,
             history: history.concat([{
-                squares: newArray,
+                squares: squares,
             }]),
             stepNumber: history.length,
         })

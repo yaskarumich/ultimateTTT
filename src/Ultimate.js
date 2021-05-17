@@ -8,12 +8,17 @@ class Ultimate extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            squares: Array(9).fill(Array(9).fill(null)),
+            // squares: Array(9).fill(Array(9).fill(null)),
             board: Array(9).fill(null),
             xIsNext: true,
             won: false,
             focus: null,
+            history: [{
+                squares: Array(9).fill(Array(9).fill(null)),
+            }],
+            stepNumber: 0,
         };
+        
     }
     // createUltimate = (winner, type) => {
     //     let count = 0
@@ -39,10 +44,12 @@ class Ultimate extends Component {
     // }
 
     handleClick(i,j) {
+        // handling history 
         if (this.state.won) {
             return;
         }
-        let newArray = this.state.squares;
+        const history = this.state.history.slice(0, this.state.stepNumber + 1);
+        let newArray = history[history.length - 1].squares;
         let squares = newArray.slice();
         let current = squares[j].slice();
         if (current[i] || this.state.board[j] || 
@@ -50,9 +57,6 @@ class Ultimate extends Component {
             return;
         }
         let newFocus = i;
-        console.log("this is focus: " + this.state.focus);
-        console.log("this is newFocus: " + newFocus);
-        console.log("this is i: " + i);
         // if (this.state.focus === i) {
         //     if (this.state.board[this.state.focus]) {
         //         newFocus = null;
@@ -84,13 +88,26 @@ class Ultimate extends Component {
             newFocus = null;
         }
         this.setState({
-            squares: newArray,
+            // squares: newArray,
             xIsNext: !this.state.xIsNext,
             focus: newFocus,
+            history: history.concat([{
+                squares: newArray,
+            }]),
+            stepNumber: history.length,
         })
     }
 
+    jumpTo(step) {
+        this.setState({
+          stepNumber: step,
+          xIsNext: (step % 2) === 0,
+        });
+      }
+
     render() {
+        const history = this.state.history;
+        const recent = history[this.state.stepNumber];
         const winner = calculateWinner(this.state.board);
         const tie = isTie(this.state.board);
         let type = ""
@@ -107,13 +124,24 @@ class Ultimate extends Component {
                 status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
             }
         }
+        const moves = history.map((step, move) => {
+            const description = move ?
+              'Go to move #' + move :
+              'Go to game start';
+            return (
+              <li key = {move}>
+                <button onClick={() => this.jumpTo(move)}>{description}</button>
+              </li>
+            );
+          });
         return(
+            <div>
             <table>
                 <h1>{status}</h1>
                 <tr>
                     <td>
                         <Board 
-                            squares = {this.state.squares[0]}
+                            squares = {recent.squares[0]}
                             onClick = {(i) => this.handleClick(i,0)}
                             winner = {winner}
                             listId = {0}
@@ -123,7 +151,7 @@ class Ultimate extends Component {
                     </td>
                     <td>
                         <Board 
-                            squares = {this.state.squares[1]}
+                            squares = {recent.squares[1]}
                             onClick = {(i) => this.handleClick(i,1)}
                             winner = {winner}
                             listId = {1}
@@ -133,7 +161,7 @@ class Ultimate extends Component {
                     </td>
                     <td>
                         <Board 
-                            squares = {this.state.squares[2]}
+                            squares = {recent.squares[2]}
                             onClick = {(i) => this.handleClick(i,2)}
                             winner = {winner}
                             listId = {2}
@@ -145,7 +173,7 @@ class Ultimate extends Component {
                 <tr>
                     <td>
                         <Board 
-                            squares = {this.state.squares[3]}
+                            squares = {recent.squares[3]}
                             onClick = {(i) => this.handleClick(i,3)}
                             winner = {winner}
                             listId = {3}
@@ -155,7 +183,7 @@ class Ultimate extends Component {
                     </td>
                     <td>
                         <Board 
-                            squares = {this.state.squares[4]}
+                            squares = {recent.squares[4]}
                             onClick = {(i) => this.handleClick(i,4)}
                             winner = {winner}
                             listId = {4}
@@ -165,7 +193,7 @@ class Ultimate extends Component {
                     </td>
                     <td>
                         <Board 
-                            squares = {this.state.squares[5]}
+                            squares = {recent.squares[5]}
                             onClick = {(i) => this.handleClick(i,5)}
                             winner = {winner}
                             listId = {5}
@@ -177,7 +205,7 @@ class Ultimate extends Component {
                 <tr>
                     <td>
                         <Board 
-                            squares = {this.state.squares[6]}
+                            squares = {recent.squares[6]}
                             onClick = {(i) => this.handleClick(i,6)}
                             winner = {winner}
                             listId = {6}
@@ -187,7 +215,7 @@ class Ultimate extends Component {
                     </td>
                     <td>
                         <Board 
-                            squares = {this.state.squares[7]}
+                            squares = {recent.squares[7]}
                             onClick = {(i) => this.handleClick(i,7)}
                             winner = {winner}
                             listId = {7}
@@ -197,7 +225,7 @@ class Ultimate extends Component {
                     </td>
                     <td>
                         <Board 
-                            squares = {this.state.squares[8]}
+                            squares = {recent.squares[8]}
                             onClick = {(i) => this.handleClick(i,8)}
                             winner = {winner}
                             listId = {8}
@@ -208,6 +236,8 @@ class Ultimate extends Component {
                 </tr>
                 {/* {this.createUltimate(winner, type)} */}
             </table>
+            <ol>{moves}</ol>
+            </div>
         )
     }
 }

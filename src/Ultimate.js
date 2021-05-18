@@ -8,13 +8,13 @@ class Ultimate extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            // squares: Array(9).fill(Array(9).fill(null)),
             board: Array(9).fill(null),
             xIsNext: true,
             history: [{
                 squares: Array(9).fill(Array(9).fill(null)),
                 won: false,
                 focus: null,
+                winners: null,
             }],
             stepNumber: 0,
             player1: "", 
@@ -66,9 +66,11 @@ class Ultimate extends Component {
         squares[j] = current;
         const new_board = this.state.board.slice();
         let win = false
+        let victors = null
         if (calculateWinner(current)) {
             new_board[j] = current[i];
-            if (calculateWinner(new_board)) {
+            victors = calculateWinner(new_board);
+            if (victors) {
                 win = true
             }
             this.setState({
@@ -83,18 +85,14 @@ class Ultimate extends Component {
         if (new_board[i]) {
             newFocus = null;
         }
-        // const pizza = [...history, ...new_history];
-        // console.log(pizza);
-        // console.log(new_history);
-        // console.log(history);
-        // console.log(newArray);
+
         this.setState({
-            // squares: newArray,
             xIsNext: !this.state.xIsNext,
             history: history.concat([{
                 squares: squares,
                 focus: newFocus,
-                won: win
+                won: win,
+                winners: victors,
             }]),
             stepNumber: history.length,
         })
@@ -120,7 +118,7 @@ class Ultimate extends Component {
     render() {
         const history = this.state.history;
         const recent = history[this.state.stepNumber];
-        const winner = calculateWinner(this.state.board);
+        const winner = recent.winners;
         const tie = isTie(this.state.board);
         let type = ""
         let status;

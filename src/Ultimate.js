@@ -25,28 +25,6 @@ class Ultimate extends Component {
         this.handleChange2 = this.handleChange2.bind(this);
         
     }
-    // createUltimate = (winner, type) => {
-    //     let count = 0
-    //     let table = []
-    //     for (let r = 0; r < 3; ++r) {
-    //         let children = []
-    //         for (let c = 0; c < 3; ++c) {
-    //             children.push(<td>
-    //                 <Board 
-    //                     squares = {this.state.squares[count]}
-    //                     onClick = {(i) => this.handleClick(i,count)}
-    //                     winner = {winner}
-    //                     listId = {count}
-    //                     type = {type}
-    //                     focus = {this.state.focus}
-    //                 />
-    //             </td>)
-    //             count++
-    //         }
-    //         table.push(children)
-    //     }
-    //     return table
-    // }
 
     handleClick(i,j) {
         // handling history 
@@ -145,115 +123,42 @@ class Ultimate extends Component {
               </li>
             );
           });
+
+          const columns = [0,1,2]
+          const rows = [0,1,2]
+          let index_count = 0
         return(
             <div>
                 <label>
-                Player 1:
-                <input type="text" value = {this.state.player1} onChange={this.handleChange} />
+                    Player 1:
+                    <input type="text" value = {this.state.player1} onChange={this.handleChange} />
                 </label>
                 <label>
-                Player 2:
-                <input type="text" value = {this.state.player2} onChange={this.handleChange2} />
+                    Player 2:
+                    <input type="text" value = {this.state.player2} onChange={this.handleChange2} />
                 </label>
             <h1>{status}</h1>
-            <table>   
-                <tr>
-                    <td>
-                        <Board 
-                            squares = {recent.squares[0]}
-                            onClick = {(i) => this.handleClick(i,0)}
-                            winner = {winner}
-                            listId = {0}
-                            type = {type}
-                            focus = {recent.focus}
-                            />
-                    </td>
-                    <td>
-                        <Board 
-                            squares = {recent.squares[1]}
-                            onClick = {(i) => this.handleClick(i,1)}
-                            winner = {winner}
-                            listId = {1}
-                            type = {type}
-                            focus = {recent.focus}
-                            />
-                    </td>
-                    <td>
-                        <Board 
-                            squares = {recent.squares[2]}
-                            onClick = {(i) => this.handleClick(i,2)}
-                            winner = {winner}
-                            listId = {2}
-                            type = {type}
-                            focus = {recent.focus}
-                            />
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <Board 
-                            squares = {recent.squares[3]}
-                            onClick = {(i) => this.handleClick(i,3)}
-                            winner = {winner}
-                            listId = {3}
-                            type = {type}
-                            focus = {recent.focus}
-                            />
-                    </td>
-                    <td>
-                        <Board 
-                            squares = {recent.squares[4]}
-                            onClick = {(i) => this.handleClick(i,4)}
-                            winner = {winner}
-                            listId = {4}
-                            type = {type}
-                            focus = {recent.focus}
-                            />
-                    </td>
-                    <td>
-                        <Board 
-                            squares = {recent.squares[5]}
-                            onClick = {(i) => this.handleClick(i,5)}
-                            winner = {winner}
-                            listId = {5}
-                            type = {type}
-                            focus = {recent.focus}
-                            />
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <Board 
-                            squares = {recent.squares[6]}
-                            onClick = {(i) => this.handleClick(i,6)}
-                            winner = {winner}
-                            listId = {6}
-                            type = {type}
-                            focus = {recent.focus}
-                            />
-                    </td>
-                    <td>
-                        <Board 
-                            squares = {recent.squares[7]}
-                            onClick = {(i) => this.handleClick(i,7)}
-                            winner = {winner}
-                            listId = {7}
-                            type = {type}
-                            focus = {recent.focus}
-                            />
-                    </td>
-                    <td>
-                        <Board 
-                            squares = {recent.squares[8]}
-                            onClick = {(i) => this.handleClick(i,8)}
-                            winner = {winner}
-                            listId = {8}
-                            type = {type}
-                            focus = {recent.focus}
-                            />
-                    </td>
-                </tr>
-                {/* {this.createUltimate(winner, type)} */}
+            <table>
+                {rows.map(row => (
+                    <tr>
+                        {columns.map(val => {
+                            let copy = index_count;
+                            index_count++;
+                            return (
+                                <td>
+                                    <Board 
+                                        squares = {recent.squares[copy]}
+                                        onClick = {(i) => this.handleClick(i,copy)}
+                                        winner = {winner}
+                                        listId = {copy}
+                                        type = {type}
+                                        focus = {recent.focus}
+                                    />
+                                </td>
+                            )
+                        })}  
+                    </tr>
+                ))}
             </table>
             <ol>{moves}</ol>
             </div>
